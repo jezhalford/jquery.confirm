@@ -1,11 +1,12 @@
 /*!
  * jquery.confirm
  *
- * @version 2.0.1
+ * @version 2.0.2
  *
  * @author My C-Labs
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  * @author Russel Vela
+ * @author Jez Halford <jez@jhdw.co.uk>
  *
  * @license MIT
  * @url http://myclabs.github.io/jquery.confirm/
@@ -19,6 +20,14 @@
     $.fn.confirm = function (options) {
         if (typeof options === 'undefined') {
             options = {};
+        }
+
+        if(typeof options.confirmButton === 'string') {
+            options.confirmButton = {value : options.confirmButton}
+        }
+
+        if(typeof options.cancelButton === 'string') {
+            options.cancelButton = {value : options.cancelButton}
         }
 
         this.click(function (e) {
@@ -40,11 +49,17 @@
      */
     $.confirm = function (options, e) {
         // Default options
-        var settings = $.extend({
+        var settings = $.extend(true, {
             text: "Are you sure?",
             title: "",
-            confirmButton: "Yes",
-            cancelButton: "Cancel",
+            confirmButton: {
+                value : "Yes",
+                classAttr : "btn-primary"
+            },
+            cancelButton: {
+                value : "Cancel",
+                classAttr : "btn-default"
+            },
             post: false,
             confirm: function (o) {
                 var url = e.currentTarget.attributes['href'].value;
@@ -77,11 +92,13 @@
                             modalHeader +
                             '<div class="modal-body">' + settings.text + '</div>' +
                             '<div class="modal-footer">' +
-                                '<button class="confirm btn btn-primary" type="button" data-dismiss="modal">' +
-                                    settings.confirmButton +
+                                '<button class="confirm btn ' + settings.confirmButton.classAttr +
+                                '" type="button" data-dismiss="modal">' +
+                                    settings.confirmButton.value +
                                 '</button>' +
-                                '<button class="cancel btn btn-default" type="button" data-dismiss="modal">' +
-                                    settings.cancelButton +
+                                '<button class="cancel btn ' + settings.cancelButton.classAttr +
+                                '" type="button" data-dismiss="modal">' +
+                                    settings.cancelButton.value +
                                 '</div>' +
                             '</div>' +
                         '</div>' +
